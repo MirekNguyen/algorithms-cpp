@@ -38,6 +38,11 @@ struct Graph {
     this->oriented = oriented;
     this->size = 0;
   }
+  ~Graph() {
+    for (int i = 0; i < size; i++) {
+      delete array[i];
+    }
+  }
   void insert(string start, string end, int distance) {
     array[size] = new Edge(start, end, distance);
     if (oriented) {
@@ -59,6 +64,11 @@ struct Dijkstra {
   int size;
   set<string> s;
   Graph *graph;
+  ~Dijkstra() {
+    for (int i = 0; i < size; i++) {
+      delete array[i];
+    }
+  }
   void get_vertices(Graph &g) {
     for (int i = 0; i < g.size; i++) {
       this->s.insert(g.array[i]->start);
@@ -133,7 +143,7 @@ struct Dijkstra {
       }
     }
   }
-  void solve(string start, string end) {
+  vector<string> solve(string start, string end) {
     solve(start);
     vector<string> v;
     while (true) {
@@ -144,15 +154,17 @@ struct Dijkstra {
         }
       }
       if (end == start || end == "") {
-        for (auto it = v.rbegin(); it != v.rend(); it++) {
-          cout << *it << " ";
-        }
-        cout << endl;
-        return;
+        return v;
       }
     }
   }
 };
+void printReverse(vector<string> v) {
+  for (auto it = v.rbegin(); it != v.rend(); it++) {
+    cout << *it << " ";
+  }
+  cout << endl;
+}
 
 int main() {
   Graph g(true);
@@ -174,7 +186,7 @@ int main() {
   // g.print();
   Dijkstra d;
   d.get_vertices(g);
-  d.solve("s", "e");
+  printReverse(d.solve("s", "e"));
   cout << endl;
   d.print();
   return 0;
